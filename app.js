@@ -22,7 +22,7 @@ app.use("/workouts", workoutsRoute);
 
 // page d'accueil
 app.get("/", (req, res) => {
-  res.render("index", {
+  res.json({
     message: "Gestion des entrainements fitness des utilisateurs",
   });
 });
