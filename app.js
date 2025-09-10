@@ -6,40 +6,45 @@ const {
   createWorkout,
   getUserWorkouts,
   getUserStats,
+  getAllUsers,
 } = require("./src/controllers/controller.js");
 const app = express();
 const usersRoute = express.Router();
 const workoutsRoute = express.Router();
 
 app.use(express.json());
-app.use(express.urlencoded(true));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// middleware pour la route users
+// middleware pour les routes
 app.use("/users", usersRoute);
+app.use("/workouts", workoutsRoute);
 
-// iddleware pour la route workuts
-app.use(workoutsRoute);
-
+// page d'accueil
 app.get("/", (req, res) => {
-  res.json({ message: "Gestion des entrainements fitness des utilisateurs" });
+  res.render("index", {
+    message: "Gestion des entrainements fitness des utilisateurs",
+  });
 });
 
 // routes
 
-// pour créer un utilisateur
-usersRoute.post("/", createUser);
+// créer un utilisateur
+usersRoute.post("/add", createUser);
 
-// recuprer les infos d'un utilisateur
+// voir tous les utilisateurs
+usersRoute.get("/all", getAllUsers);
+
+// récupérer un utilisateur par ID
 usersRoute.get("/:id", getUserById);
 
-// créer un workut pour un utillisateur
-workoutsRoute.post("/workouts", createWorkout);
+// créer un workout
+workoutsRoute.post("/", createWorkout);
 
-// lister tous les entraînements d’un utilisateur.
+// lister tous les entraînements d’un utilisateur
 usersRoute.get("/:id/workouts", getUserWorkouts);
 
-// GET /users/:id/stats → renvoyer des stats (total d’entraînements, durée totale, moyenne par
+// stats utilisateur
 usersRoute.get("/:id/stats", getUserStats);
 
 module.exports = app;

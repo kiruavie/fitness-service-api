@@ -121,6 +121,23 @@ async function getUserWorkouts(req, res) {
   }
 }
 
+// Voir tous les utilisateurs
+async function getAllUsers(req, res) {
+  try {
+    const users = await prisma.user.findMany();
+    res.render("users", { users });
+
+    res.status(200).json({
+      message: "Tous les utilisateurs sont ici",
+      data: users,
+    });
+  } catch (error) {
+    console.error("Erreur prisma", error);
+
+    return res.status(500).json({ message: "Erreur interne du serveur" });
+  }
+}
+
 async function getUserStats(req, res) {
   try {
     const { id } = req.params;
@@ -189,6 +206,7 @@ module.exports = {
   createUser,
   getUserById,
   createWorkout,
+  getAllUsers,
   getUserWorkouts,
   getUserStats,
 };
